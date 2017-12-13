@@ -1,22 +1,28 @@
 import Foundation
 
 func main() {
-    let DocumentDirURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-    let fileName = "test"
-    let fileURL = DocumentDirURL.appendingPathComponent(fileName).appendingPathExtension("txt")
+    var path: String
     
-    var contents = ""
-    
-    do {
-        contents = try String(contentsOf: fileURL)
-    } catch let error as NSError {
-        print("Failed reading from URL: \(fileURL), Error: " + error.localizedDescription)
+    if let env = ProcessInfo.processInfo.environment["ENVIRONMENT"]{
+        switch env {
+        case "PRODUCTION":
+            print("This is production...but you knew that")
+        case "TEST":
+            print("This is test...but you knew that")
+        case "LOCAL":
+            path = "/Users/stevenprichard/Developer/Swift/Q-Learn-Swift/Sources/Q-Learn-Swift/Worlds/test.txt"
+        default:
+            path = ""
+        }
     }
     
-    print("Contents: \(contents)")
+    do {
+        let data = try NSString(contentsOfFile: path, encoding: String.Encoding.ascii.rawValue)
+        // If a value was returned, print it.
+        print(data)
+    } catch {
+        print("There was an errrrrrr....with reading from file \n\(error)")
+    }
 }
 
-// This main.swift file IS the script that will execute when this program runs, which is why you're not seeing any output, you have defined a `func main()` but you havn't called it. Try this:
 main()
-
-// Also, check out this blog post, I think you'll like it: https://www.swiftbysundell.com/posts/building-a-command-line-tool-using-the-swift-package-manager
