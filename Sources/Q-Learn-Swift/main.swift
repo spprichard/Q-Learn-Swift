@@ -1,28 +1,44 @@
 import Foundation
 
-func main() {
-    var path: String
+enum EnvironmentError: Error {
+    case unableToDetermineEnvironment
+    case unableToCreateEnvironment(forKey: String)
+}
+
+enum Environment {
+    case production
+    case test
+    case local
     
-    if let env = ProcessInfo.processInfo.environment["ENVIRONMENT"]{
-        switch env {
-        case "PRODUCTION":
-            print("This is production...but you knew that")
-        case "TEST":
-            print("This is test...but you knew that")
-        case "LOCAL":
-            path = "/Users/stevenprichard/Developer/Swift/Q-Learn-Swift/Sources/Q-Learn-Swift/Worlds/test.txt"
+    init(processInfo: ProcessInfo) throws {
+        guard let environmentKey = ProcessInfo.processInfo.environment["ENVIRONMENT"] else {
+            throw EnvironmentError.unableToDetermineEnvironment
+        }
+        
+        switch environmentKey {
+        case "PRODUCTION": self = .production
+        case "TEST": self = .test
+        case "LOCAL": self = .local
         default:
-            path = ""
+            throw EnvironmentError.unableToCreateEnvironment(forKey: environmentKey)
         }
     }
     
-    do {
-        let data = try NSString(contentsOfFile: path, encoding: String.Encoding.ascii.rawValue)
-        // If a value was returned, print it.
-        print(data)
-    } catch {
-        print("There was an errrrrrr....with reading from file \n\(error)")
+    var path: String {
+        switch self {
+        case .production: return "<insert path here>"
+        case .test: return "<insert path here>"
+        case .local: return "<insert path here>"
+        }
     }
 }
 
-main()
+do {
+    let environment = try Environment(processInfo: ProcessInfo.processInfo)
+    let data = try String(contentsOfFile: environment.path, encoding: .ascii)
+    
+    // If a value was returned, print it.
+    print(data)
+} catch {
+    print("There was an errrrrrr....with reading from file \n\(error)")
+}
