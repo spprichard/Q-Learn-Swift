@@ -28,7 +28,7 @@ enum Environment {
         switch self {
         case .production: return "<insert path here>"
         case .test: return "<insert path here>"
-        case .local: return "<insert path here>"
+        case .local: return "/Users/stevenprichard/Developer/Swift/Q-Learn-Swift/Sources/Q-Learn-Swift/Worlds"
         }
     }
 }
