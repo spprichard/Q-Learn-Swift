@@ -28,7 +28,7 @@ enum Environment {
         switch self {
         case .production: return "<insert path here>"
         case .test: return "<insert path here>"
-        case .local: return "/Users/stevenprichard/Developer/Swift/Q-Learn-Swift/Sources/Q-Learn-Swift/Worlds"
+        case .local: return "/Users/stevenprichard/Developer/Swift/Q-Learn-Swift/Sources/Q-Learn-Swift/Worlds/test.txt"
         }
     }
 }
@@ -37,8 +37,6 @@ do {
     let environment = try Environment(processInfo: ProcessInfo.processInfo)
     let data = try String(contentsOfFile: environment.path, encoding: .ascii)
     
-    // If a value was returned, print it.
-    print(data)
 } catch {
     print("There was an errrrrrr....with reading from file \n\(error)")
 }
